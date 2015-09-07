@@ -1,0 +1,42 @@
+{% extends "layout.html" %} {% block content %}
+
+<div class="container">
+	<div class="alert alert-info text-center" role="alert">
+		Bem vindo ao <span class="glyphicon glyphicon-list"></span> CachesApp.</br>
+		Entre com seus valores para address size bits, tag size bits, index
+		size bits, offset size bits.</br> Para a calculadora retornar o
+		tamanho da cache em bits.</br>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-md-6">{% include 'cache_config_form.html' %}</div>
+
+		<div class="col-md-6">
+			<h3>
+				<span class="glyphicon glyphicon-link"></span> Links Úteis
+			</h3>
+			<ul>
+				<li><a href="https://en.wikipedia.org/wiki/CPU_cache">CPU Cache</a></li>
+				<li><a href="https://en.wikipedia.org/wiki/Cache_coherency">Cache
+						Coherency</a></li>
+				<li><a href="http://pages.cs.wisc.edu/~markhill/DineroIV/">Dinero IV
+						Trace-Driven Uniprocessor Cache Simulator</a></li>
+				<li><a href="http://courses.missouristate.edu/kenvollmar/mars/">MARS
+						(MIPS Assembler and Runtime Simulator)</a></li>
+				<li><a href="https://github.com/tonussi/org/blob/master/caches.pdf">Como
+						Calcular Caches Simples</a></li>
+				<li><a
+					href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-172-performance-engineering-of-software-systems-fall-2010/video-lectures/lecture-4-computer-architecture-and-performance-engineering/">
+						Lecture 4: Computer Architecture and Performance Engineering</a></li>
+				</a>
+			</ul>
+		</div>
+		<div class="col-md-6">
+			<h3>
+				<span class="glyphicon glyphicon-transfer"></span> Os seus
+				resultados aparecerão aqui
+			</h3>
+			<div class="alert alert-success" role="alert" id="form-messages"></div>
+		</div>
+	</div>
+{% endblock %}

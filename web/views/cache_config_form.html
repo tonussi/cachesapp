@@ -1,0 +1,115 @@
+<form class="form-horizontal" id="ajax-cache-config" method="post"
+	action="gethint.php">
+	<fieldset>
+
+		<!-- Form Name -->
+		<legend>Configuração da Cache</legend>
+
+		<!-- Appended Input-->
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="address_size_bits">Endereço
+				Físico Bits</label>
+			<div class="col-md-8">
+				<div class="input-group">
+					<input id="address_size_bits" name="address_size_bits"
+						class="form-control" placeholder="Exemplo: 32 bits"
+						required="required" type="number" min="16" max="128"> <span
+						class="input-group-addon">bits</span>
+				</div>
+				<p class="help-block">Aqui você determina quantos bits são
+					necessários para representar o endereço da memória física. Você
+					pode colocar entre 16 bits e 128 bits para o endereço da memória
+					física.</p>
+			</div>
+		</div>
+
+		<!-- Appended Input-->
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="offset_size_bits">Offset
+				Bits</label>
+			<div class="col-md-8">
+				<div class="input-group">
+					<input id="offset_size_bits" name="offset_size_bits"
+						class="form-control" placeholder="Exemplo: 10 bits"
+						required="required" type="number" min="8" max="128"> <span
+						class="input-group-addon">bits</span>
+				</div>
+				<p class="help-block">Aqui você determina quantos bits são
+					necessários para representar o offset de cada bloco da cache. Você
+					só pode colocar entre 8 (byte) e 128 bits (doubleword).</p>
+			</div>
+		</div>
+
+		<!-- Appended Input-->
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="index_size_bits">Índice
+				Bits</label>
+			<div class="col-md-8">
+				<div class="input-group">
+					<input id="index_size_bits" name="index_size_bits"
+						class="form-control" placeholder="Exemplo: 13 bits"
+						required="required" type="number" min="0" max="128"> <span
+						class="input-group-addon">bits</span>
+				</div>
+				<p class="help-block">Aqui você determina quantos bits são
+					necessários para representar a faixa de índices (linhas da cache,
+					entradas da cache, etc). Você só pode colocar entre 0 e 128 como
+					tamanho do campo de índice.</p>
+			</div>
+		</div>
+		<!-- Appended Input-->
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="tag_size_bits">Tag
+				Bits</label>
+			<div class="col-md-8">
+				<div class="input-group">
+					<input id="tag_size_bits" name="tag_size_bits" class="form-control"
+						placeholder="Exemplo: 9 bits" required="required" type="number"
+						min="8" max="120"> <span class="input-group-addon">bits</span>
+				</div>
+				<p class="help-block">Aqui você determina quantos bits são
+					necessários para representar a tag. No mínimo 8 bits e no máximo
+					120. Pois nessa aplicação você tem um mínimo de 8 bits de offset.
+					Existem outros tipos de cache com tamanhos diferentes.</p>
+			</div>
+		</div>
+
+		<!-- Select Basic -->
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="n_way">N-Way</label>
+			<div class="col-md-8">
+				<select id="n_way" name="n_way" class="form-control">
+					<option value="1">1 Way</option>
+					<option value="2">2 Way</option>
+					<option value="3">3 Way</option>
+					<option value="4">4 Way</option>
+					<option value="8">8 Way</option>
+				</select>
+			</div>
+		</div>
+
+		<!-- Select Basic -->
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="control_size_bits">Bits
+				de Controle</label>
+			<div class="col-md-8">
+				<select id="control_size_bits" name="control_size_bits"
+					class="form-control">
+					<option value="0">Sem Controle</option>
+					<option value="1">Bit de Validade</option>
+					<option value="2">Bit de Validade, Write Buffer</option>
+					<option value="3">Bit de Validade, Write Buffer e Write
+						Throught</option>
+				</select>
+			</div>
+		</div>
+
+		<!-- Button -->
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="submit_cache_form">Configuração</label>
+			<div class="col-md-4">
+				<button id="submit_cache_form" type="submit" class="btn btn-primary">Lançar</button>
+			</div>
+		</div>
+	</fieldset>
+</form>
