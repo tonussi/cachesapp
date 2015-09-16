@@ -1,5 +1,1 @@
-vendor/
-.env
-.buildpath
-.project
-.settings/
+/vendor/
