@@ -1,5 +1,4 @@
 <?php
-use Monolog\Formatter\JsonFormatter;
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -22,23 +21,24 @@ use Monolog\Formatter\JsonFormatter;
  * @copyright 2015 Universidade Federal de Santa Catarina {@link http://ufsc.br/}
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Cache.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'CacheCalculadoraImpl.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+
     $address_size_bits = filter_var($_POST["address_size_bits"], FILTER_VALIDATE_INT);
-    //echo 'Address' . $address_size_bits;
-    $offset_size_bits = filter_var($_POST["offset_size_bits"], FILTER_VALIDATE_INT);
-    //echo 'Offset: ' . $offset_size_bits;
-    $index_size_bits = filter_var($_POST["index_size_bits"], FILTER_VALIDATE_INT);
-    //echo 'Index: ' . $index_size_bits;
-    $tag_size_bits = filter_var($_POST["tag_size_bits"], FILTER_VALIDATE_INT);
-    //echo 'Tag: ' . $tag_size_bits;
-    $way_size = filter_var($_POST["n_way"], FILTER_VALIDATE_INT);
-    //echo 'Nway: ' . $n_way;
+    // echo 'Address' . $address_size_bits;
     $control_size_bits = filter_var($_POST["control_size_bits"], FILTER_VALIDATE_INT);
-    //echo 'Control: ' . $control_size_bits;
+    // echo 'Control: ' . $control_size_bits;
+    $tag_size_bits = filter_var($_POST["tag_size_bits"], FILTER_VALIDATE_INT);
+    // echo 'Tag: ' . $tag_size_bits;
+    $index_size_bits = filter_var($_POST["index_size_bits"], FILTER_VALIDATE_INT);
+    // echo 'Index: ' . $index_size_bits;
+    $offset_size_bits = filter_var($_POST["offset_size_bits"], FILTER_VALIDATE_INT);
+    // echo 'Offset: ' . $offset_size_bits;
+    $way_size = filter_var($_POST["way_size"], FILTER_VALIDATE_INT);
+    // echo 'Nway: ' . $way_size;
 
     foreach ($_POST as $value) {
         if ($value < 0 or $value == null) {
@@ -49,16 +49,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
+
         $cache = new Cache($address_size_bits, $control_size_bits, $tag_size_bits, $index_size_bits, $offset_size_bits, $way_size);
+
         $calculadora = new CacheCalculadoraImpl();
-        echo 'Tamanho Total da Cache: ' . $calculadora->calculaTamanhoCachePadrao($cache) . ' bits';
 
-        // echo json_encode($cache);
+        $message = "Tamanho Total da Cache: " . $calculadora->calculaTamanhoCachePadrao($cache) . " bits";
+
+        // $message .= "\n\t" . json_encode($cache, JSON_PRETTY_PRINT) . "\n";
+
+        echo $message;
+
         // echo ' Tamanho em bits: ' . $calculadora->calculaTamanhoCachePadraoParametrizado($cache->getAddressSizeBits(), $cache->getTagSizeBits(), $cache->getIndexSizeBits(), $cache->getOffsetSizeBits(), $cache->getControlSizeBits(), $cache->getWaysSize());
-
     } catch (Exception $e) {
         http_response_code(400);
-        echo "(ノಠ益ಠ)ノ Exceção de Configuração da Cache: " . $e->getMessage() . ". Você precisa apenas ajustar suas configurações para calcular corretamente o tamanho da cache.";
+        echo "Exceção de Configuração da Cache: " . $e->getMessage() . ". Você precisa apenas ajustar suas configurações para calcular corretamente o tamanho da cache.";
         exit();
     }
 } else {
