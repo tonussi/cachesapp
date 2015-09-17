@@ -18,8 +18,8 @@
 				</div>
 				<p class="help-block">Aqui você determina quantos bits são
 					necessários para representar o endereço da memória física. Você
-					pode colocar entre 16 bits e 128 bits para o endereço da memória
-					física.</p>
+					pode colocar entre 16 bits (2^16 bytes de endereçamento) e 128 bits
+					(2^128 bytes de endereçamento disponíveis).</p>
 			</div>
 		</div>
 
@@ -31,12 +31,13 @@
 				<div class="input-group">
 					<input id="offset_size_bits" name="offset_size_bits"
 						class="form-control" placeholder="Exemplo: 10 bits"
-						required="required" type="number" min="8" max="128"> <span
+						required="required" type="number" min="2" max="13"> <span
 						class="input-group-addon">bits</span>
 				</div>
 				<p class="help-block">Aqui você determina quantos bits são
 					necessários para representar o offset de cada bloco da cache. Você
-					só pode colocar entre 8 (byte) e 128 bits (quadword).</p>
+					só pode colocar entre 2 bits (4 bytes cada bloco) de offset e 13
+					bits (8192 bytes cada bloco) de offset.</p>
 			</div>
 		</div>
 
@@ -52,11 +53,14 @@
 						class="input-group-addon">bits</span>
 				</div>
 				<p class="help-block">Aqui você determina quantos bits são
-					necessários para representar a faixa de índices (linhas da cache,
-					entradas da cache, etc). Você só pode colocar entre 0 e 128 como
-					tamanho do campo de índice.</p>
+					necessários para representar a faixa de índices (conjuntos, ou
+					linhas da cache, ou entradas da cache, no caso de Fully-Associative
+					não tem índices por isso existe 0 de cota inferior). Você só pode
+					colocar entre 0 (fully-associative) e 128 bits (2^128 entradas de
+					cache) como tamanho do campo de índice.</p>
 			</div>
 		</div>
+
 		<!-- Appended Input-->
 		<div class="form-group">
 			<label class="col-md-4 control-label" for="tag_size_bits">Tag
@@ -74,17 +78,21 @@
 			</div>
 		</div>
 
-		<!-- Select Basic -->
+		<!-- Appended Input-->
 		<div class="form-group">
-			<label class="col-md-4 control-label" for="n_way">N-Way</label>
+			<label class="col-md-4 control-label" for="way_size">Configuração
+				n-way</label>
 			<div class="col-md-8">
-				<select id="n_way" name="n_way" class="form-control">
-					<option value="1">1 Way</option>
-					<option value="2">2 Way</option>
-					<option value="3">3 Way</option>
-					<option value="4">4 Way</option>
-					<option value="8">8 Way</option>
-				</select>
+				<div class="input-group">
+					<input id="way_size" name="way_size" class="form-control"
+						placeholder="Exemplo: 3 way" required="required" type="number"
+						min="1" max="128"> <span class="input-group-addon">ways</span>
+				</div>
+				<p class="help-block">Aqui você determina o número de ways,
+					Diretamente Mapeada é 1-way, e aí tem 2-way, 3, 4, 5, ... até
+					completamente associativa em que você deve colocar 0 em índice e
+					colocar aqui a quantidade de ways. Completamente associativa tem 1
+					conjunto, porém muitos tag+bloco no mesmo conjunto.</p>
 			</div>
 		</div>
 
