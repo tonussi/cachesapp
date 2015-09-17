@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<table name="caches">
+		<column>address_size_bits</column>
+		<column>control_size_bits</column>
+		<column>tag_size_bits</column>
+		<column>offset_size_bits</column>
+		<column>index_size_bits</column>
+		<column>ways_size</column>
+		<row>
+			<value>36</value>
+			<value>1</value>
+			<value>13</value>
+			<value>10</value>
+			<value>13</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>32</value>
+			<value>1</value>
+			<value>13</value>
+			<value>9</value>
+			<value>10</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>32</value>
+			<value>1</value>
+			<value>13</value>
+			<value>11</value>
+			<value>8</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>43</value>
+			<value>1</value>
+			<value>24</value>
+			<value>0</value>
+			<value>19</value>
+			<value>32</value>
+		</row>
+		<row>
+			<value>32</value>
+			<value>1</value>
+			<value>4</value>
+			<value>14</value>
+			<value>14</value>
+			<value>1</value>
+		</row>
+	</table>
+</dataset>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<table name="usuarios_caches">
+		<column>idusuario</column>
+		<column>iscache</column>
+		<row>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>2</value>
+		</row>
+	</table>
+</dataset>

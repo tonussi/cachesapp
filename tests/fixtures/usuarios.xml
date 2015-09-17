@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<table name="usuarios">
+		<column>nome</column>
+		<column>curso</column>
+		<row>
+			<value>"Lucas Tonussi"</value>
+			<value>"Ciência da Computação"</value>
+		</row>
+	</table>
+</dataset>
