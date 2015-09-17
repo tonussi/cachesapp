@@ -21,136 +21,106 @@
  * @copyright 2015 Universidade Federal de Santa Catarina {@link http://ufsc.br/}
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once (dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Cache.php');
-
-class SQLCacheInsertionsTest extends PHPUnit_Framework_TestCase
+class SQLCacheInsertionsTest extends PHPUnit_Extensions_Database_TestCase
 {
 
-    public function testTableDropping()
+    public $fixtures = array(
+        'caches',
+        'usuarios',
+        'usuarios_caches'
+    );
+
+    protected $conn = null;
+
+    public function getConnection()
     {
-        try {
-            $dbname = 'dbcaches';
-            $user = 'lucastonussi';
-            $password = 'postgres';
-            $host = 'localhost';
-            $pdo = new PDO("pgsql:dbname=$dbname;host=$host", $user, $password);
-            $statement = "drop table if exists caches cascade;
-                          drop table if exists usuarios cascade;";
-            $pdo->query($statement);
-        } catch (Exception $e) {
-            print_r($e->getMessage());
+        if ($this->conn === null) {
+            try {
+                $pdo = new PDO('mysql:host=localhost;dbname=cachesapp', '', '');
+                $this->conn = $this->createDefaultDBConnection($pdo, 'cachesapp');
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+            }
         }
-        $pdo = null;
+        return $this->conn;
     }
 
-    public function testTableCacheCreation()
+    public function getDataSet()
     {
-        try {
-            $dbname = 'dbcaches';
-            $user = 'lucastonussi';
-            $password = 'postgres';
-            $host = 'localhost';
-            $pdo = new PDO("pgsql:dbname=$dbname;host=$host", $user, $password);
-            $statement = "create table caches(id serial not null,
-                            address_size_bits integer not null,
-                            tag_size_bits integer not null,
-                            indice_size_bits integer not null,
-                            offset_size_bits integer not null,
-                            ways integer not null,
-                            hash bytea,
-                            constraint caches_pkey primary key (id),
-                            constraint caches_ways_check check (ways = any (array[1, 2, 3, 4, 5, 6, 7, 8])));
-                          create index caches_idx on \"caches\" (id);";
-            $pdo->query($statement);
-        } catch (Exception $e) {
-            print_r($e->getMessage());
+        $fixtures = $this->fixtures;
+        $compositeDs = new PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array());
+        $fixturePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fixtures';
+        foreach ($fixtures as $fixture) {
+            $xmlFile = $fixturePath . DIRECTORY_SEPARATOR . "$fixture.xml";
+            $ds = $this->createFlatXmlDataSet($xmlFile);
+            $compositeDs->addDataSet($ds);
         }
-        $pdo = null;
+        return $compositeDs;
     }
 
-    public function testTableUsersCreation()
+    public function loadDataSet($dataSet)
     {
-        try {
-            $dbname = 'dbcaches';
-            $user = 'lucastonussi';
-            $password = 'postgres';
-            $host = 'localhost';
-            $pdo = new PDO("pgsql:dbname=$dbname;host=$host", $user, $password);
-            $statement = "create table usuarios(id serial not null,
-                            nome character varying(60) not null,
-                            codcaches integer,
-                            constraint usuarios_pkey primary key (id),
-                            constraint codcaches_fkey foreign key (codcaches)
-                            references caches (id) match simple on update no action on delete no action,
-                            constraint usuarios_nome_check check (nome::text <> ''::text)));
-                          create index material_idx on \"usuarios\" (id);";
-            $pdo->query($statement);
-        } catch (Exception $e) {
-            print_r($e->getMessage());
-        }
-        $pdo = null;
+        // set the new dataset
+        $this->getDatabaseTester()->setDataSet($dataSet);
+        // call setUp which adds the rows
+        $this->getDatabaseTester()->onSetUp();
     }
 
-    public function testTriggerCreation()
+    public function setUp()
     {
-        try {
-            $dbname = 'dbcaches';
-            $user = 'lucastonussi';
-            $password = 'postgres';
-            $host = 'localhost';
-            $pdo = new PDO("pgsql:dbname=$dbname;host=$host", $user, $password);
-            $statement = "create or replace function hash_update_tg() returns trigger as \$hash_update_tg\$
-                            declare juntadados text;
-                          begin
-                            if tg_op = 'insert' or tg_op = 'update' then
-                              juntadados = concat(new.address_size::text,
-                                                  new.tag_size_bits::text,
-                                                  new.indice_size_bits::text,
-                                                  new.offset_size_bits::text);
-                              new.hash = digest(juntadados, 'sha256');
-                            end if;
-                              return new;
-                            end;
-                          \$hash_update_tg\$ language plpgsql;
-                          create trigger caches_hash_update before insert or update
-                            on caches for each row execute procedure hash_update_tg();";
-            $pdo->query($statement);
-        } catch (Exception $e) {
-            print_r($e->getMessage());
+        $conn = $this->getConnection();
+        $pdo = $conn->getConnection();
+        // set up tables
+        $fixtureDataSet = $this->getDataSet($this->fixtures);
+        foreach ($fixtureDataSet->getTableNames() as $table) {
+            // drop table
+            $pdo->exec("DROP TABLE IF EXISTS `$table`;");
+            // recreate table
+            $meta = $fixtureDataSet->getTableMetaData($table);
+            $create = "CREATE TABLE IF NOT EXISTS `$table` ";
+            $cols = array();
+            foreach ($meta->getColumns() as $col) {
+                $cols[] = "`$col` VARCHAR(200)";
+            }
+            $create .= '(' . implode(',', $cols) . ');';
+            $pdo->exec($create);
         }
-        $pdo = null;
+
+        parent::setUp();
     }
 
-    public function testTableCacheInsertion()
+    public function tearDown()
     {
-        try {
-            $dbname = 'dbcaches';
-            $user = 'lucastonussi';
-            $password = 'postgres';
-            $host = 'localhost';
-            $pdo = new PDO("pgsql:dbname=$dbname;host=$host", $user, $password);
-            $statement = "insert into caches(id, address_size, tag_size_bits, indice_size_bits, offset_size_bits, ways) VALUES (0, 32, 13, 9, 11, 2);";
-            $pdo->query($statement);
-        } catch (Exception $e) {
-            print_r($e->getMessage());
+        $allTables = $this->getDataSet($this->fixtures)->getTableNames();
+        foreach ($allTables as $table) {
+            // drop table
+            $conn = $this->getConnection();
+            $pdo = $conn->getConnection();
+            $pdo->exec("DROP TABLE IF EXISTS `$table`;");
         }
-        $pdo = null;
+
+        parent::tearDown();
     }
 
-    public function testGettingDataFromTableCaches()
+    function testReadDatabase()
     {
-        try {
-            $dbname = 'dbcaches';
-            $user = 'lucastonussi';
-            $password = 'postgres';
-            $host = 'localhost';
-            $pdo = new PDO("pgsql:dbname=$dbname;host=$host", $user, $password);
-            $statement = "select * from table caches;";
-            $pdo->query($statement);
-        } catch (Exception $e) {
-            print_r($e->getMessage());
-        }
-        $pdo = null;
+        $conn = $this->getConnection()->getConnection();
+
+        // fixtures auto loaded, let's read some data
+        $query = $conn->query('SELECT * FROM caches');
+        $results = $query->fetchAll(PDO::FETCH_COLUMN);
+        $this->assertEquals(5, count($results));
+
+        // now reload them
+        $ds = $this->getDataSet(array(
+            'caches'
+        ));
+
+        $this->loadDataSet($ds);
+
+        $query = $conn->query('SELECT * FROM caches');
+        $results = $query->fetchAll(PDO::FETCH_COLUMN);
+        $this->assertEquals(5, count($results));
     }
 }
 ?>
