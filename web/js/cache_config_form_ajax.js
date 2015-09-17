@@ -51,11 +51,12 @@ $(function() {
             // Set the message text.
             $(formMessages).text(response);
 
-            // // Clear the form.
+            // Clear the form.
             // $('#address_size_bits').val('');
             // $('#offset_size_bits').val('');
             // $('#index_size_bits').val('');
             // $('#tag_size_bits').val('');
+            // $('#way_size').val('');
 
           })
           .fail(
