@@ -30,21 +30,18 @@ class CacheCalculadoraImplTest extends PHPUnit_Framework_TestCase
     public function testIfTagIsSettingOkay()
     {
         $cache = new Cache(36, 3, 13, 14, 9, 1);
-        $calculadora = new CacheCalculadoraImpl();
         $this->assertEquals(13, $cache->getTagSizeBits());
     }
 
     public function testIfAddressIsSettingOkay()
     {
         $cache = new Cache(36, 3, 13, 14, 9, 1);
-        $calculadora = new CacheCalculadoraImpl();
         $this->assertEquals(36, $cache->getAddressSizeBits());
     }
 
     public function testIfControlIsSettingOkay()
     {
         $cache = new Cache(36, 3, 13, 14, 9, 1);
-        $calculadora = new CacheCalculadoraImpl();
         $this->assertEquals(3, $cache->getControlSizeBits());
     }
 
@@ -102,6 +99,65 @@ class CacheCalculadoraImplTest extends PHPUnit_Framework_TestCase
         $calculadora = new CacheCalculadoraImpl();
         $this->assertEquals($calculadora->calculaTamanhoCachePadrao($cache), $calculadora->calculaTamanhoCacheSemIndice($cache, 32));
     }
+
+    /**
+     * public function __construct ( $address_size_bits = 32, // (endereço)
+     *                               $control_size_bits =  3, // (controle)
+     *                               $tag_size_bits     = 21, // (tag)
+     *                               $index_size_bits   =  0, // (full-assoc)
+     *                               $offset_size_bits  = 11, // (offset)
+     *                               $ways_size         = 16) // (ways)
+     *
+     * 16×(32−11+3+2^11×8) = 262528
+     */
+    public function testCalculoFullyAssociative16Blocos()
+    {
+        $cache = new Cache(32, 3, 21, 0, 11, 16);
+        $calculadora = new CacheCalculadoraImpl();
+        $this->assertEquals(262528, $calculadora->calculaTamanhoCacheSemIndice($cache, 16));
+    }
+
+    public function testCalculoFullyAssociative64Blocos()
+    {
+        $cache = new Cache(32, 3, 21, 0, 11, 64);
+        $calculadora = new CacheCalculadoraImpl();
+        $this->assertEquals(262528, $calculadora->calculaTamanhoCacheSemIndice($cache, 16));
+    }
+
+    /**
+     * public function __construct ( $address_size_bits = 46, // (endereço)
+     *                               $control_size_bits =  3, // (controle)
+     *                               $tag_size_bits     = 21, // (tag)
+     *                               $index_size_bits   = 11, // (full-assoc)
+     *                               $offset_size_bits  = 14, // (offset)
+     *                               $ways_size         = 1) // (ways)
+     *
+     * 2^11×(21+3+2^17) = 268484608
+     */
+    public function testCalculoPadrao46Bits21TagOneWay()
+    {
+        $cache = new Cache(46, 3, 21, 11, 14, 1);
+        $calculadora = new CacheCalculadoraImpl();
+        $this->assertEquals(268484608, $calculadora->calculaTamanhoCachePadrao($cache));
+    }
+
+    /**
+     * public function __construct ( $address_size_bits = 46, // (endereço)
+     *                               $control_size_bits =  3, // (controle)
+     *                               $tag_size_bits     = 21, // (tag)
+     *                               $index_size_bits   = 11, // (full-assoc)
+     *                               $offset_size_bits  = 14, // (offset)
+     *                               $ways_size         = 1) // (ways)
+     *
+     * 2^11×(21+3+2^17) = 268484608
+     */
+    public function testCalculoPadrao46Bits21TagTwoWay()
+    {
+        $cache = new Cache(46, 3, 21, 11, 14, 2);
+        $calculadora = new CacheCalculadoraImpl();
+        $this->assertEquals(536969216, $calculadora->calculaTamanhoCachePadrao($cache));
+    }
+
 }
 
 ?>
