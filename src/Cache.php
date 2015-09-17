@@ -31,17 +31,28 @@ class Cache
         if ($address_size_bits != ($tag_size_bits + $index_size_bits + $offset_size_bits)) {
             throw new Exception("$address_size_bits is not equal to $tag_size_bits + $index_size_bits + $offset_size_bits");
         }
+
+        if ($ways_size > 0 and $ways_size < 129) {
+            $this->ways_size = $ways_size;
+        } else {
+            throw new Exception("Ways precisa ser entre (0 e 129).");
+        }
+
         $this->address_size_bits = $address_size_bits;
         $this->control_size_bits = $control_size_bits;
         $this->tag_size_bits = $tag_size_bits;
         $this->index_size_bits = $index_size_bits;
         $this->offset_size_bits = $offset_size_bits;
-        $this->ways_size = $ways_size;
     }
 
     public function __toString()
     {
         return 'Configuração: ' . $this->address_size_bits . ' ' . $this->control_size_bits . ' ' . $this->tag_size_bits . ' ' . $this->index_size_bits . ' ' . $this->offset_size_bits . ' ' . $this->ways_size;
+    }
+
+    public function __hash()
+    {
+        return sha1($this->address_size_bits . ' ' . $this->control_size_bits . ' ' . $this->tag_size_bits . ' ' . $this->index_size_bits . ' ' . $this->offset_size_bits . ' ' . $this->ways_size);
     }
 
     public function getTagSizeBits()
@@ -97,6 +108,14 @@ class Cache
         return $this->control_size_bits;
     }
 
+    /**
+     * Existe a possibilidade de ser SEM_CONTROLE ou ter
+     * 1 bit de controle para valid bit
+     * 2 bits de controle para valid bit e write buffer
+     * 3 bits de controle para valid bits, write buffer, e write throught
+     *
+     * @param number $control_size_bits
+     */
     public function setControlSizeBits($control_size_bits = 1)
     {
         if ($control_size_bits > 0 && $control_size_bits < 3)
@@ -110,7 +129,7 @@ class Cache
 
     public function setWaysSize($ways_size = 1)
     {
-        if ($ways_size % 2 == 0 and $ways >= 0 && $ways < 9)
+        if ($ways_size > 0 && $ways_size < 129)
             $this->ways_size = $ways_size;
     }
 }
