@@ -45,15 +45,19 @@ class CacheCalculadoraImpl implements CacheCalculadoraInterface
         return $cache->getWaysSize() * pow(2, $cache->getIndexSizeBits()) * ($cache->getTagSizeBits() + $cache->getControlSizeBits() + (pow(2, $cache->getOffsetSizeBits()) << 3));
     }
 
-    public function calculaTamanhoCachePadraoParametrizado($address_size_bits=32, $tag_size_bits, $index_size_bits, $offset_size_bits, $control_size_bits, $ways_size)
+    public function calculaTamanhoCachePadraoParametrizado($address_size_bits = 32, $tag_size_bits, $index_size_bits, $offset_size_bits, $control_size_bits, $ways_size)
     {
         return $ways_size * pow(2, $index_size_bits) * ($tag_size_bits + $control_size_bits + (pow(2, $offset_size_bits) << 3));
     }
 
     public function calculaTamanhoCacheSemIndice(Cache $cache, $quantidade_blocos)
     {
-        $sets = $quantidade_blocos / $cache->getWaysSize();
-        return $quantidade_blocos * (($cache->getAddressSizeBits() - $cache->getOffsetSizeBits() - ceil(log($sets, 2))) + $cache->getControlSizeBits() + (pow(2, $cache->getOffsetSizeBits()) << 3));
+        if ($cache->getIndexSizeBits() > 0) {
+            $sets = $quantidade_blocos / $cache->getWaysSize();
+            return $quantidade_blocos * (($cache->getAddressSizeBits() - $cache->getOffsetSizeBits() - ceil(log($sets, 2))) + $cache->getControlSizeBits() + (pow(2, $cache->getOffsetSizeBits()) << 3));
+        }
+        return $quantidade_blocos * ($cache->getAddressSizeBits() - $cache->getOffsetSizeBits() + $cache->getControlSizeBits() + (pow(2, $cache->getOffsetSizeBits()) << 3));
+
     }
 
     public function calculaTamanhoCacheSemIndiceParametrizado($address_size_bits, $tag_size_bits, $offset_size_bits, $control_size_bits, $ways_size, $quantidade_blocos)
