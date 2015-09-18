@@ -130,7 +130,7 @@ class CacheCalculadoraImplTest extends PHPUnit_Framework_TestCase
      *                               $tag_size_bits     = 21, // (tag)
      *                               $index_size_bits   = 11, // (full-assoc)
      *                               $offset_size_bits  = 14, // (offset)
-     *                               $ways_size         = 1) // (ways)
+     *                               $ways_size         = 1)  // (ways)
      *
      * 2^11×(21+3+2^17) = 268484608
      */
@@ -147,7 +147,7 @@ class CacheCalculadoraImplTest extends PHPUnit_Framework_TestCase
      *                               $tag_size_bits     = 21, // (tag)
      *                               $index_size_bits   = 11, // (full-assoc)
      *                               $offset_size_bits  = 14, // (offset)
-     *                               $ways_size         = 1) // (ways)
+     *                               $ways_size         = 1)  // (ways)
      *
      * 2^11×(21+3+2^17) = 268484608
      */
