@@ -18,9 +18,43 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 // Our web handlers
 
+// Heroku production settings
+$dbopts = parse_url(getenv('DATABASE_URL'));
+
+// Dev settings
+// $dbopts["port"] = "5432";
+// $dbopts["host"] = "localhost";
+// $dbopts["user"] = "lucastonussi";
+// $dbopts["pass"] = "postgres";
+
+$app->register(new Herrera\Pdo\PdoServiceProvider(), array(
+    'pdo.dsn' => 'pgsql:dbname=dbcaches' . ltrim($dbopts["path"], '/') . ';host=' . $dbopts["host"],
+    'pdo.port' => $dbopts["port"],
+    'pdo.username' => $dbopts["user"],
+    'pdo.password' => $dbopts["pass"]
+));
+
 $app->get('/', function () use($app) {
+
     $app['monolog']->addDebug('logging output.');
-    return $app['twig']->render('index.twig');
+
+    $st = $app['pdo']->prepare('select * from caches');
+
+    $st->execute();
+
+    $caches = array();
+
+    while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+        $app['monolog']->addDebug('Row ' . $row['id']);
+        $caches[] = $row;
+    }
+
+    $lazyLoad = 10;
+
+    return $app['twig']->render('index.twig', array(
+        'caches' => $caches,
+        'lazyLoad' => $lazyLoad
+    ));
 });
 
 $app->run();
