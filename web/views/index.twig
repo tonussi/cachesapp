@@ -5,7 +5,10 @@
 		Bem vindo ao <span class="glyphicon glyphicon-list"></span> CachesApp.</br>
 		Entre com seus valores para address size bits, tag size bits, index
 		size bits, offset size bits.</br> Para a calculadora retornar o
-		tamanho da cache em bits.</br>
+		tamanho da cache em bits. Abaixo você encontra a esquematização de uma cache 3-way
+		para fins de estudo teórico.</br>
+	<img alt="Cache 3 Way" height="340" src="https://raw.githubusercontent.com/tonussi/org/master/cache3way.png"/>
+	<img alt="Perfil da Cache" height="340" src="https://raw.githubusercontent.com/tonussi/org/master/perfilcache.png"/>
 	</div>
 	<hr>
 	<div class="row">
@@ -37,6 +40,39 @@
 				resultados aparecerão aqui
 			</h3>
 			<div class="alert alert-success" role="alert" id="form-messages"></div>
+
+			<div class="alert alert-info" role="alert">
+				<p>Algumas caches contidas na base de dados:</p>
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Bits de Endereço</th>
+							<th>Bits de Controle</th>
+							<th>Bits de Tag</th>
+							<th>Bits de Índice</th>
+							<th>Bits de Offset</th>
+							<th>N-Ways</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for c in caches|slice(0, lazyLoad) %}
+						<tr>
+							<td>{{ c.address_size_bits }}</td>
+							<td>{{ c.control_size_bits }}</td>
+							<td>{{ c.tag_size_bits     }}</td>
+							<td>{{ c.index_size_bits   }}</td>
+							<td>{{ c.offset_size_bits  }}</td>
+							<td>{{ c.ways_size         }}</td>
+						</tr>
+						{% else %}
+						  <li>Falhou ao buscar a cache.</li>
+						{% endfor %}
+					</tbody>
+				</table>
+				<ul>
+				</ul>
+			</div>
+
 		</div>
 	</div>
-{% endblock %}
+	{% endblock %}
