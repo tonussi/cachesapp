@@ -22,6 +22,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 $dbopts = parse_url(getenv('DATABASE_URL'));
 
 // Dev settings
+// $dbopts["dbname"] = 'dbcaches';
 // $dbopts["port"] = "5432";
 // $dbopts["host"] = "localhost";
 // $dbopts["user"] = "lucastonussi";
@@ -35,22 +36,22 @@ $app->register(new Herrera\Pdo\PdoServiceProvider(), array(
 ));
 
 $app->get('/', function () use($app) {
-
+    
     $app['monolog']->addDebug('logging output.');
-
-    $st = $app['pdo']->prepare('select * from caches');
-
+    
+    $lazyLoad = 4;
+    
+    $st = $app['pdo']->prepare('select * from caches limit ' . $lazyLoad);
+    
     $st->execute();
-
+    
     $caches = array();
-
+    
     while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
         $app['monolog']->addDebug('Row ' . $row['id']);
         $caches[] = $row;
     }
-
-    $lazyLoad = 10;
-
+    
     return $app['twig']->render('index.twig', array(
         'caches' => $caches,
         'lazyLoad' => $lazyLoad

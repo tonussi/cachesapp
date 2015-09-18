@@ -55,7 +55,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{% for c in caches|slice(0, lazyLoad) %}
+						{% for c in caches %}
 						<tr>
 							<td>{{ c.address_size_bits }}</td>
 							<td>{{ c.control_size_bits }}</td>
