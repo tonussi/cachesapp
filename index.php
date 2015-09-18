@@ -28,7 +28,7 @@ $dbopts = parse_url(getenv('DATABASE_URL'));
 // $dbopts["pass"] = "postgres";
 
 $app->register(new Herrera\Pdo\PdoServiceProvider(), array(
-    'pdo.dsn' => 'pgsql:dbname=dbcaches' . ltrim($dbopts["path"], '/') . ';host=' . $dbopts["host"],
+    'pdo.dsn' => 'pgsql:dbname=' . ltrim($dbopts["path"], '/') . ';host=' . $dbopts["host"],
     'pdo.port' => $dbopts["port"],
     'pdo.username' => $dbopts["user"],
     'pdo.password' => $dbopts["pass"]
