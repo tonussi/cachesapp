@@ -67,13 +67,15 @@
 
 <p>Para revelar as interrogações, podemos fazer:</p>
 
-<p>$24576\ KB \times 1024 \times 8 = 201326592\ bits$ (de 
+<p>$196608\ KB \times 1024 \times 8 = 1610612736\ bits$ (de 
 dados)</p>
-<p>$\frac{201326592}{3\ ways} = 67108864\ bits$ (por via)</p>
-<p>$\frac{8388608}{2^{12}} = 16384 = 2^{14}\ entradas$ (conjuntos)</p>
-<p>$3\times(2^{14}\times(8+1+(2^{12}\times8)))\ bits$</p>
+<p>$196608\ KB \times 1024 = 201326592\ bytes$ (de 
+dados, mais fácil de trabalhar)</p>
+<p>$\frac{201326592}{3\ ways} = 67108864\ bytes$ (por via)</p>
+<p>$\frac{67108864}{2^{12}} = 16384 = 2^{14}\ entradas$ (conjuntos)</p>
+<p>$3\times(2^{14}\times((34-14-12)+1+(2^{12}\times8)))\ bits$</p>
 <p>$3\times(16384\times(8+1+32768)) = 1611055104\ bits$</p>
-<p>$\frac{201400320}{8} = 201381888\ bytes$</p>
+<p>$\frac{1611055104}{8} = 201381888\ bytes$</p>
 <p>$\frac{201381888}{1024} = 196662\ KB$ (total da cache)</p>
 
 <table class="table table-hover">
