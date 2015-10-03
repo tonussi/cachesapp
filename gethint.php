@@ -75,8 +75,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         $calculadora = new CacheCalculadoraImpl();
         
-        $message = "Tamanho Total da Cache: " . $calculadora->calculaTamanhoCachePadrao($cache) . " bits";
+        $retorno = $calculadora->calculaTamanhoCachePadrao($cache);
         
+        $message = "Tamanho Total da Cache: " . $retorno . " (bits) = " . ($retorno / 1024 / 8) . " (KB)";
+
         // $message .= "\n\t" . json_encode($cache, JSON_PRETTY_PRINT) . "\n";
         
         echo $message;
