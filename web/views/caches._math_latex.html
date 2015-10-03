@@ -1,0 +1,94 @@
+<h3>Cache Diretamente Mapeada, 1 bit de validade, 32 bits de
+	endereço físico:</h3>
+
+<table class="table table-hover">
+	<thead>
+		<tr class="header">
+			<th align="left">tag</th>
+			<th align="left">índice</th>
+			<th align="left">offset</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="odd">
+			<td align="left">16</td>
+			<td align="left">7</td>
+			<td align="left">9</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>$2^{7} \times (16 + 1 + 2^{9} \times 8)\ bits$</p>
+<p>$128 \times (16+1+4096)\ bits$</p>
+<p>$\frac{264320}{8}=33040\ bytes$</p>
+
+<h3>Cache 2 Way, 1 bit de validade, 32 bits de endereço físico:</h3>
+<table class="table table-hover">
+	<thead>
+		<tr class="header">
+			<th align="left">tag</th>
+			<th align="left">índice</th>
+			<th align="left">offset</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="odd">
+			<td align="left">13</td>
+			<td align="left">9</td>
+			<td align="left">10</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>$2\times(2^{9}\times(13+1+2^{10}\times8))\ bits$</p>
+<p>$2\times(512\times(13+1+8192))\ bits$</p>
+<p>$\frac{8402944}{8}=1050368\ bytes$</p>
+
+<h3>Cache tipo-3-way. 1 bit de validade, endereços físicos de 34
+	bits:</h3>
+<p>Mas nesse exemplo, temos que a cache tem $24576\ KB$ de dados.</p>
+
+<table class="table table-hover">
+	<thead>
+		<tr class="header">
+			<th align="left">tag</th>
+			<th align="left">índice</th>
+			<th align="left">offset</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="odd">
+			<td align="left">?</td>
+			<td align="left">?</td>
+			<td align="left">12</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Para revelar as interrogações, podemos fazer:</p>
+
+<p>$24576\ KB \times 1024 \times 8 = 201326592\ bits$ (de 
+dados)</p>
+<p>$\frac{201326592}{3\ ways} = 67108864\ bits$ (por via)</p>
+<p>$\frac{8388608}{2^{12}} = 16384 = 2^{14}\ entradas$ (conjuntos)</p>
+<p>$3\times(2^{14}\times(8+1+(2^{12}\times8)))\ bits$</p>
+<p>$3\times(16384\times(8+1+32768)) = 1611055104\ bits$</p>
+<p>$\frac{201400320}{8} = 201381888\ bytes$</p>
+<p>$\frac{201381888}{1024} = 196662\ KB$ (total da cache)</p>
+
+<table class="table table-hover">
+	<thead>
+		<tr class="header">
+			<th align="left">tag</th>
+			<th align="left">índice</th>
+			<th align="left">offset</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="odd">
+			<td align="left">$34-14-12=8$</td>
+			<td align="left">14</td>
+			<td align="left">12</td>
+		</tr>
+	</tbody>
+</table>
